@@ -2,15 +2,7 @@ import React, { useState } from "react";
 import { Box, Input, Select, Button, Table, Thead, Tbody, Tr, Th, Td, Flex, Spacer, Heading } from "@chakra-ui/react";
 import { FaSearch, FaSort } from "react-icons/fa";
 
-const data = [
-  { id: 1, name: "John Doe", age: 30, city: "New York" },
-  { id: 2, name: "Jane Smith", age: 25, city: "London" },
-  { id: 3, name: "Bob Johnson", age: 35, city: "Paris" },
-  { id: 4, name: "Alice Brown", age: 28, city: "New York" },
-  { id: 5, name: "Charlie Davis", age: 32, city: "London" },
-];
-
-const Index = () => {
+const Index = ({ names }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [sortColumn, setSortColumn] = useState("");
@@ -33,16 +25,12 @@ const Index = () => {
     }
   };
 
-  const filteredData = data.filter((item) => {
-    const nameMatch = item.name.toLowerCase().includes(searchTerm.toLowerCase());
-    const cityMatch = selectedCity ? item.city === selectedCity : true;
-    return nameMatch && cityMatch;
+  const filteredNames = names.filter((name) => {
+    return name.toLowerCase().includes(searchTerm.toLowerCase());
   });
 
-  const sortedData = filteredData.sort((a, b) => {
-    if (a[sortColumn] < b[sortColumn]) return sortDirection === "asc" ? -1 : 1;
-    if (a[sortColumn] > b[sortColumn]) return sortDirection === "asc" ? 1 : -1;
-    return 0;
+  const sortedNames = filteredNames.sort((a, b) => {
+    return sortDirection === "asc" ? a.localeCompare(b) : b.localeCompare(a);
   });
 
   return (
@@ -76,11 +64,9 @@ const Index = () => {
           </Tr>
         </Thead>
         <Tbody>
-          {sortedData.map((item) => (
-            <Tr key={item.id}>
-              <Td>{item.name}</Td>
-              <Td>{item.age}</Td>
-              <Td>{item.city}</Td>
+          {sortedNames.map((name) => (
+            <Tr key={name}>
+              <Td>{name}</Td>
             </Tr>
           ))}
         </Tbody>
